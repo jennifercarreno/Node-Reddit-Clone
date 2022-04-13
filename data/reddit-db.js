@@ -8,9 +8,9 @@ mongoose.connect(
   {
     useNewUrlParser: true
   },
-  function(err, db) {
+  (err) => {
     assert.equal(null, err);
-    console.log('Connected successfully to database');
+    console.log("Connected successfully to database");
 
     // db.close(); turn on for testing
   }

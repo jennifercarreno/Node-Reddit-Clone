@@ -1,26 +1,22 @@
+const express = require("express")
+const {engine} = require('express-handlebars')
 
-// import express from 'express';
-// import { engine } from 'express-handlebars';
-// import require from 'express-validator'
+const app = express();
 
-const express = require('express')
-const app = express()
-
-
-require('./controllers/posts')(app);
-require('./data/reddit-db');
-const exphbs = require('express-handlebars');
-const Handlebars = require('handlebars')
-const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
-
-app.engine('handlebars', exphbs.engine({ defaultLayout: 'main', handlebars: allowInsecurePrototypeAccess(Handlebars) }));
+app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 app.set('views', './views');
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+require('./controllers/posts')(app);
+
+// Set db
+require('./data/reddit-db');
+
 app.get('/', (req, res) => {
-    res.render('home');
+    res.render('posts-index');
 });
 
 app.get('/posts/new', (req, res, next) => {
