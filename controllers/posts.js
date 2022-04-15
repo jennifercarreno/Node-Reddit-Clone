@@ -6,7 +6,8 @@ module.exports = (app) => {
     app.get('/', async (req, res) => {
         try {
           const posts = await Post.find({}).lean();
-          return res.render('posts-index', { posts });
+          const currentUser = req.user;
+          return res.render('posts-index', { posts, currentUser });
         } catch (err) {
           console.log(err.message);
         }
@@ -21,8 +22,13 @@ module.exports = (app) => {
 
       // saves new post
       app.post('/posts/new', (req, res) => {
-        const post = new Post(req.body);
-        post.save(() => res.redirect('/'));
+        if (req.user) {
+          const post = new Post(req.body);
+      
+          post.save(() => res.redirect('/'));
+        } else {
+          return res.status(401); // UNAUTHORIZED
+        }
       });
 
   // displays one post
