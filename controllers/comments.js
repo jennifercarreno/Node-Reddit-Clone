@@ -4,6 +4,10 @@ const Comment = require('../models/comment');
 
 module.exports = (app) => {
 
+    app.get('/sign-up', (req, res) => {
+        res.render('sign-up');
+       });
+
     // CREATE Comment
     app.post('/posts/:postId/comments', (req, res) => {
         // INSTANTIATE INSTANCE OF MODEL
