@@ -12,7 +12,6 @@ app.use(express.urlencoded({ extended: false }));
 
 require('./controllers/posts')(app);
 
-// Set db
 require('./data/reddit-db');
 
 app.get('/', (req, res) => {
@@ -23,4 +22,7 @@ app.get('/posts/new', (req, res, next) => {
     res.render('posts-new');
 });
 
+
 app.listen(3000);
+
+module.exports = app;
