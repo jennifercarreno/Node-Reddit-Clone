@@ -3,7 +3,6 @@ const express = require("express")
 const {engine} = require('express-handlebars')
 const cookieParser = require('cookie-parser');
 const checkAuth = require('./middleware/check-auth');
-
 const app = express();
 
 app.engine('handlebars', engine());
@@ -14,13 +13,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser()); 
 app.use(checkAuth);
+app.use(express.static('public'));
 
 
 require('./controllers/posts')(app);
-
 require('./controllers/comments.js')(app);
-
 require('./controllers/auth.js')(app);
+require('./controllers/replies.js')(app);
 
 require('./data/reddit-db');
 
