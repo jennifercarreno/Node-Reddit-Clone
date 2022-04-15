@@ -1,7 +1,7 @@
 // test/posts.js
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const { describe, it } = require('mocha');
+const { describe, it, before } = require('mocha');
 const app = require('../server');
 
 const agent = chai.request.agent(app);
@@ -9,8 +9,11 @@ const agent = chai.request.agent(app);
 // Import the Post model from our models folder so we
 // we can use it in our tests.
 const Post = require('../models/post');
+const User = require('../models/user');
+
 
 const should = chai.should();
+
 
 chai.use(chaiHttp);
 
@@ -19,8 +22,27 @@ describe('Posts', function () {
   const newPost = {
     title: 'post title',
     url: 'https://www.google.com',
-    summary: 'post summary'
+    summary: 'post summary',
+    subreddit: 'test'
   };
+
+  const user = {
+    username: 'poststest',
+    password: 'testposts',
+  };
+
+  before(function (done) {
+    agent
+      .post('/sign-up')
+      .set('content-type', 'application/x-www-form-urlencoded')
+      .send(user)
+      .then(function (res) {
+        done();
+      })
+      .catch(function (err) {
+        done(err);
+      });
+  });
 
   it('should create with valid attributes at POST /posts/new', function (done) {
     // Checks how many posts there are now
@@ -57,8 +79,25 @@ describe('Posts', function () {
       done(err);
   });
 
-  after(function () {
-    Post.findOneAndDelete(newPost);
-});
+  after(function (done) {
+    Post.findOneAndDelete(newPost)
+    .then(function () {
+      agent.close();
+  
+      User
+        .findOneAndDelete({
+          username: user.username,
+        })
+        .then(function () {
+          done();
+        })
+        .catch(function (err) {
+          done(err);
+        });
+    })
+    .catch(function (err) {
+      done(err);
+    });
   });
+});
 });
