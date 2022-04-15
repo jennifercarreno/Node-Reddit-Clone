@@ -18,9 +18,7 @@ app.get('/', (req, res) => {
     res.render('posts-index');
 });
 
-app.get('/posts/new', (req, res, next) => {
-    res.render('posts-new');
-});
+
 
 
 app.listen(3000);

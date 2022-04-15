@@ -48,10 +48,6 @@ describe('Posts', function () {
           .catch(function (err) {
             done(err);
           });
-
-          after(function () {
-            Post.findOneAndDelete(newPost);
-        });
       })
       .catch(function (err) {
         done(err);
@@ -60,5 +56,9 @@ describe('Posts', function () {
   .catch(function (err) {
       done(err);
   });
+
+  after(function () {
+    Post.findOneAndDelete(newPost);
+});
   });
 });
